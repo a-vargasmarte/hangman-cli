@@ -16,7 +16,7 @@ const Letter = function (character) {
             console.log(this.guessed);
         }
         else {
-            console.log(this.guessed)
+            // console.log(this.guessed)
         }
     }
 };

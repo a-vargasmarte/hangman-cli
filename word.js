@@ -5,6 +5,8 @@ let Letter = require("./letter.js");
 
 // we declare a constructor function Word
 const Word = function (word) {
+
+    this.word = word;
     // we create an array of letters by using
     // .split("")
     // then we use .map to create new Letter objects
