@@ -29,18 +29,29 @@ let pickedWord;
 function pickWord() {
     // we store a random word from wordBank in the randomWord argument
     pickedWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-    console.log(pickedWord);
+    // console.log(pickedWord);
     // then we use the Word constructor to store it
     pickedWord = new Word(pickedWord);
 }
 
 pickWord();
 console.log(pickedWord.toString());
+// console.log(pickedWord)
 
 // we declare a variable to count how many times the user is prompted to guess
 let count = 0;
-// array in which we will store each user guess
-let guessArray = [];
+// array in which we will store right guesses
+let rightGuesses = [];
+
+// array in which we will store wrong guesses
+let wrongGuesses = [];
+
+// array containing all concactenated guesses
+let allGuesses = [];
+
+// array in which we store keys pressed
+let keysPressed = [];
+
 
 // // we declare a function where we recursively prompt the user to guess
 // let userPrompt = function () {
@@ -59,37 +70,101 @@ process.stdin.on('keypress', (str, key) => {
         process.exit();
     }
     else {
-        console.log(key.name);
-        pickedWord.callCheck(key.name);
-        console.log(pickedWord.word.includes(key.name));
-        // pickedWord.letterArray.map(function (letter) {
-        // if (key.name === letter.character) {
-        //     console.log('yay');
-        //     guessArray.push(key.name);
-        //     // letter.character = key.name;
+
+        // // if the key has already been pressed...
+        // if (keysPressed.includes(key.name) && rightGuesses.length > 0 && wrongGuesses.length > 0) {
+        //     console.log("already pressed!");
+        //     pickedWord.letterArray.map(letter => letter.getSolution());
+        //     // and we pop the last element of allGuesses
+        //     console.log(rightGuesses);
+        //     rightGuesses.pop();
+        //     console.log(rightGuesses);
+        //     wrongGuesses.pop();
         // }
 
         // else {
-        //     console.log('wrong choice!');
-        //     guessesLeft--;
-        //     console.log(guessesLeft);
-
-        //     if (guessesLeft === 0) {
-        //         console.log('You lose, loser!');
-        //         guessesLeft = 10;
-        //         losses++;
-        //         pickWord();
-        //     }
+        //     // push keys into keysPressed
+        //     keysPressed.push(key.name);
         // }
-        // console.log(pickedWord.word);
-        // console.log(pickedWord.letterArray.includes(letter.character));
-        // });
-        console.log(guessArray);
+        // console.log(key.name);
+        // console.log(pickedWord);
+        // call the callCheck method to see if the pressed key
+        // matches the Letter object
+        pickedWord.callCheck(key.name);
+
+        // for each Letter in letterArray...
+        pickedWord.letterArray.map(function (letter) {
+            // if each letter in letterArray is guessed...
+            if (letter.guessed) {
+                // invoke getSolution method to see if user
+                // key is equal to any letter to guess.
+                letter.getSolution();
+            }
+        });
+
+        // console.log(pickedWord.word.length);
+
+        // if key is not included in pickedWord.word..
+
+        if (!pickedWord.word.includes(key.name)) {
+            // guessesLeft goes down by one
+            console.log("Wrong! Guesses left: " + guessesLeft--);
+
+            // I push wrong guesses into wrongGuesses
+            wrongGuesses.push(key.name);
+
+            if (guessesLeft === 0) {
+                // losses go up by one
+                console.log("You lose! | Losses: " + losses++);
+
+                // guessesLeft is reset to 10
+                guessesLeft = 10;
+
+                // allGuesses is redeclared as an empty array
+                allGuesses = [];
+                // and we pick another word
+                pickWord();
+                rightGuesses = [];
+                // wrongGuesses is redeclared as an empty array
+                wrongGuesses = [];
+            }
+        }
+
+        for (let i = 0; i < pickedWord.word.length; i++) {
+            if (key.name === pickedWord.word[i]) {
+                rightGuesses.push(pickedWord.word[i]);
+                // console.log(rightGuesses);
+            }
+        }
+
+        allGuesses = rightGuesses.concat(wrongGuesses);
+
+        // concactenate right and wrong guesses
+        console.log("Letters guessed so far... " + allGuesses.join(' '));
+        // console.log(rightGuesses.join(' '));
+
+        // if the length of rightGuesses is equal to pickedWord.word...
+
+        if (pickedWord.word.length === rightGuesses.length) {
+            // wins increase by one
+            wins++
+            // guesses left reset to 10
+            guessesLeft = 10;
+
+            // allGuesses is redeclared as an empty array
+            allGuesses = [];
+            // a new word is picked
+            pickWord();
+
+            // right guesses is redeclared as an empty string
+            rightGuesses = [];
+            // console.log(guessesLeft);
+            wrongGuesses = [];
+        }
+
+        // invoke toString to show user updated hidden word
+        console.log(pickedWord.toString());
     }
 });
-
-// console.log(pickedWord.letterArray);
-
-
 
 console.log('Press any key...');

@@ -13,7 +13,7 @@ const Letter = function (character) {
     this.check = function (char) {
         if (char === character) {
             this.guessed = true
-            console.log(this.guessed);
+            // console.log(this.guessed);
         }
         else {
             // console.log(this.guessed)
