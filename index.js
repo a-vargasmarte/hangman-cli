@@ -52,6 +52,9 @@ let allGuesses = [];
 // array in which we store keys pressed
 let keysPressed = [];
 
+// function that resets all above empty arrays
+
+
 
 // // we declare a function where we recursively prompt the user to guess
 // let userPrompt = function () {
@@ -69,23 +72,15 @@ process.stdin.on('keypress', (str, key) => {
     if (key.ctrl && key.name === 'x') {
         process.exit();
     }
+    else if (key.ctrl && key.name === 's') {
+        console.log('im a new shortcut');
+        // pick a new word
+        pickWord();
+        console.log(pickedWord.toString());
+        // reset all arrays of guesses
+
+    }
     else {
-
-        // // if the key has already been pressed...
-        // if (keysPressed.includes(key.name) && rightGuesses.length > 0 && wrongGuesses.length > 0) {
-        //     console.log("already pressed!");
-        //     pickedWord.letterArray.map(letter => letter.getSolution());
-        //     // and we pop the last element of allGuesses
-        //     console.log(rightGuesses);
-        //     rightGuesses.pop();
-        //     console.log(rightGuesses);
-        //     wrongGuesses.pop();
-        // }
-
-        // else {
-        //     // push keys into keysPressed
-        //     keysPressed.push(key.name);
-        // }
         // console.log(key.name);
         // console.log(pickedWord);
         // call the callCheck method to see if the pressed key
@@ -165,6 +160,7 @@ process.stdin.on('keypress', (str, key) => {
         // invoke toString to show user updated hidden word
         console.log(pickedWord.toString());
     }
+
 });
 
 console.log('Press any key...');
